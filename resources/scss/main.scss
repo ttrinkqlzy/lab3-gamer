@@ -1,0 +1,117 @@
+//цвета из лабы 1
+$bg-page: #ffffff;
+$header-bg: #1d1d1f;
+$header-text: #f5f5f7;
+$btn-bg: #007aff;
+$btn-hover: #0066d9;
+$text-dark: #141414;
+$text-light: #65656b;
+$card-border: #d2d2d7;
+$base-color: #e4e4e8;
+
+//переопределение переменных bootstrap под свои цвета
+$primary: $btn-bg;
+$dark: $header-bg;
+$body-bg: $bg-page;
+$body-color: $text-dark;
+$border-color: $card-border;
+
+//добавление своего брейкпоинта xxxl
+$grid-breakpoints: (
+  xs: 0, sm: 576px, md: 768px, lg: 992px, xl: 1200px, xxl: 1400px,
+  xxxl: 1700px // брейкпоинт свой
+);
+$container-max-widths: (
+  sm: 540px, md: 720px, lg: 960px, xl: 1140px, xxl: 1320px,
+  xxxl: 1500px 
+);
+
+//подключение bootstrap через scss-исходник
+@import "~bootstrap/scss/bootstrap";
+
+//миксин для покраски фона карточек
+@mixin card-shade($color) {
+  .card-body {
+    background-color: rgba($color, 0.25); //полупрозрачный оттенок
+  }
+}
+
+//стили navbar под тёмную шапку из лабы 1
+//классы navbar и navbar-brand из компонента bootstrap
+.gamer-navbar {
+  background: $header-bg;
+  border-radius: 12px;
+  padding: 10px 20px;
+  margin-top: 20px;
+
+  .navbar-brand {
+    color: $header-text !important; //перебивает стиль bootstrap
+    font-weight: bold;
+    font-size: 20px;
+    .brand-icon { font-size: 24px; margin-right: 6px; }
+  }
+
+  .btn-load {
+    color: $header-text;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    &:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: $header-text;
+    }
+  }
+}
+
+.page-title {
+  font-size: 28px;
+  font-weight: bold;
+  color: $text-dark;
+}
+
+//стили карточки
+//классы card, card-body, card-title, card-text из компонента bootstrap
+.product-card {
+  border: 1px solid $card-border;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s;
+
+  &:hover { transform: translateY(-4px); } //карточка чуть приподнимается
+
+  .card-img-wrapper {
+    position: relative; //якорь для бейджа
+    overflow: hidden; //если картинка не влезает убираем лишнее
+    .card-img-top { width: 100%; height: 220px; object-fit: cover; display: block; }
+    .card-type {
+      position: absolute; top: 8px; left: 8px;
+      background: rgba(0, 0, 0, 0.7);
+      color: #fff; padding: 2px 10px;
+      font-size: 12px; font-weight: bold; border-radius: 4px;
+    }
+  }
+
+  .card-title { font-size: 18px; font-weight: bold; color: $text-dark; }
+  .card-text { color: $text-light; }
+}
+
+//цикл для покраски карточек
+$shades-count: 5;
+$darken-step: 8%;
+@for $i from 1 through 20 {
+  $shade: (($i - 1) % $shades-count) + 1; //оттенки по кругу 1..5
+  .product-card:nth-child(#{$i}) {
+    $darkness: $shade * $darken-step;
+    $new-color: darken($base-color, $darkness);
+    @include card-shade($new-color);
+  }
+}
+
+//стиль слова-подсказки в модальном
+.hint {
+  color: $btn-bg;
+  border-bottom: 1px dashed $btn-bg;
+  cursor: pointer;
+}
+
+.gamer-footer {
+  border-top: 1px solid $card-border;
+  color: $text-dark;
+}
