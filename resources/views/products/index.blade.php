@@ -35,7 +35,7 @@
                     <div class="card product-card h-100">
                         <div class="card-img-wrapper">
                             @if($product->image)
-                                <img src="{{ asset('storage/' . $product->image) }}" class="card-img-top" alt="{{ $product->title }}">
+                                <img src="{{ asset('storage/' . $product->image) }}" class="card-img-top" alt="{{ $product->title }}" title="{{ $product->title }}">
                             @else
                                 <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center text-white">
                                     Нет фото
@@ -47,13 +47,13 @@
                             <h5 class="card-title">{{ $product->title }}</h5>
                             <p class="card-text small flex-grow-1">{{ $product->short_desc }}</p>
                             <p class="text-muted small mb-2">Дата релиза: {{ $product->released_at_formatted }}</p>
-                            <div class="d-flex gap-2 mt-auto">
-                                <a href="{{ route('products.show', $product) }}" class="btn btn-primary btn-sm">Подробнее</a>
-                                <a href="{{ route('products.edit', $product) }}" class="btn btn-outline-secondary btn-sm">Редактировать</a>
-                                <form action="{{ route('products.destroy', $product) }}" method="POST" onsubmit="return confirm('Удалить товар?')">
+                            <div class="d-flex flex-wrap gap-2 mt-auto">
+                                <a href="{{ route('products.show', $product) }}" class="btn btn-primary btn-sm flex-grow-1">Подробнее</a>
+                                <a href="{{ route('products.edit', $product) }}" class="btn btn-outline-secondary btn-sm flex-grow-1">Изменить</a>
+                                <form action="{{ route('products.destroy', $product) }}" method="POST" onsubmit="return confirm('Удалить товар?')" class="flex-grow-1 d-flex">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-danger btn-sm">Удалить</button>
+                                    <button type="submit" class="btn btn-danger btn-sm w-100">Удалить</button>
                                 </form>
                             </div>
                         </div>

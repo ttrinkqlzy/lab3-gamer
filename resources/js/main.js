@@ -87,6 +87,7 @@ function renderModal(i) {
   modalImage.alt = p.title; 
   modalImage.title = p.title; 
 
+  
   //popover через bootstrap
   //оборачиваем слово-подсказку в span с атрибутами data-bs
   modalText.innerHTML = p.fullDesc.replace(

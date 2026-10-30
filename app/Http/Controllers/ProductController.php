@@ -75,29 +75,38 @@ class ProductController extends Controller
     }
 
     //правила валидации
-    private function validateProduct(Request $request): array
+    private function validateProduct(Request $request, ?Product $product = null): array
     {
+        //для update игнорируем текущий товар, чтобы не ругалось на своё же название
+        $titleUnique = \Illuminate\Validation\Rule::unique('products', 'title')
+            ->ignore($product?->id)
+            ->whereNull('deleted_at');
+
         return $request->validate([
-            'type' => 'required|string|max:255',
-            'title' => 'required|string|max:255',
+            'type'  => 'required|in:Игровая мышь,Механическая клавиатура,Игровой коврик',
+            'title' => ['required', 'string', 'max:255', 'regex:/^[а-яА-ЯёЁa-zA-Z0-9\s\-]+$/u', $titleUnique],
             'short_desc' => 'required|string|max:255',
             'full_desc' => 'required|string',
-            'hint_word' => 'required|string|max:255',
+            'hint_word' => ['required', 'string', 'max:255', 'regex:/^[а-яА-ЯёЁa-zA-Z0-9\s\-]+$/u'],
             'hint_text' => 'required|string|max:255',
-            'image' => 'nullable|image|max:2048', //до 2 МБ
-            'released_at'=> 'required|date',
+            'image' => 'nullable|image|max:2048',
+            'released_at'=> 'required|date|before_or_equal:today',
         ], [
-            //сообщения об ошибках
             'type.required' => 'Укажите тип товара',
+            'type.in' => 'Выберите тип из списка',
             'title.required' => 'Укажите название',
+            'title.regex' => 'Название может содержать только буквы, цифры, пробелы и дефис',
+            'title.unique' => 'Товар с таким названием уже существует',
             'short_desc.required' => 'Заполните краткое описание',
             'full_desc.required' => 'Заполните полное описание',
             'hint_word.required' => 'Укажите слово-подсказку',
+            'hint_word.regex' => 'Слово-подсказка может содержать только буквы, цифры, пробелы и дефис',
             'hint_text.required' => 'Укажите текст подсказки',
             'image.image' => 'Файл должен быть изображением',
             'image.max' => 'Картинка не должна превышать 2 МБ',
             'released_at.required'=> 'Укажите дату релиза',
             'released_at.date' => 'Введите корректную дату',
+            'released_at.before_or_equal' => 'Дата релиза не может быть в будущем',
         ]);
     }
     /**

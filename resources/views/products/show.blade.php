@@ -20,7 +20,7 @@
     <div class="row">
         <div class="col-md-6">
             @if($product->image)
-                <img src="{{ asset('storage/' . $product->image) }}" class="img-fluid rounded" alt="{{ $product->title }}">
+                <img src="{{ asset('storage/' . $product->image) }}" class="img-fluid rounded" alt="{{ $product->title }}" title="{{ $product->title }}">
             @else
                 <div class="bg-secondary text-white d-flex align-items-center justify-content-center rounded" style="height: 300px;">
                     Нет фото
@@ -36,14 +36,14 @@
             <p>{{ $product->full_desc }}</p>
             <p><strong>Подсказка:</strong> {{ $product->hint_word }} — {{ $product->hint_text }}</p>
 
-            <div class="d-flex gap-2 mt-4">
-                <a href="{{ route('products.edit', $product) }}" class="btn btn-primary">Редактировать</a>
-                <form action="{{ route('products.destroy', $product) }}" method="POST" onsubmit="return confirm('Удалить товар?')">
+            <div class="d-flex flex-wrap gap-2 mt-4">
+                <a href="{{ route('products.edit', $product) }}" class="btn btn-primary">Изменить</a>
+                <a href="{{ route('products.index') }}" class="btn btn-secondary">Назад</a>
+                <form action="{{ route('products.destroy', $product) }}" method="POST" onsubmit="return confirm('Удалить товар?')" class="d-flex">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="btn btn-danger">Удалить</button>
                 </form>
-                <a href="{{ route('products.index') }}" class="btn btn-secondary">Назад</a>
             </div>
         </div>
     </div>
